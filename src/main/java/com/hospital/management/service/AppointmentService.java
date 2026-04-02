@@ -58,6 +58,7 @@ public class AppointmentService {
         int queueNumber = (int) bookedCount + 1;
 
         appointment.setPatientName(appointment.getPatientName());
+        appointment.setDoctorName(doctor.getName());
         appointment.setQueueNumber(queueNumber);
         appointment.setStatus("BOOKED");
 
@@ -140,6 +141,18 @@ public class AppointmentService {
 
     // Get all appointments
     public List<Appointment> getAllAppointments() {
-        return appointmentRepository.findAll();
+        List<Appointment> appointments = appointmentRepository.findAll();
+        
+        // Populate doctor names
+        for (Appointment appointment : appointments) {
+            if (appointment.getDoctorId() != null) {
+                Doctor doctor = doctorRepository.findById(appointment.getDoctorId()).orElse(null);
+                if (doctor != null) {
+                    appointment.setDoctorName(doctor.getName());
+                }
+            }
+        }
+        
+        return appointments;
     }
 }

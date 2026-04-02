@@ -15,6 +15,7 @@ public class Appointment {
     private String doctorId;
     private String patientId;
     private String patientName;
+    private String doctorName;
 
     private LocalDate date;
 
@@ -77,5 +78,13 @@ public class Appointment {
 
     public String getPatientName() {
         return this.patientName;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 }
