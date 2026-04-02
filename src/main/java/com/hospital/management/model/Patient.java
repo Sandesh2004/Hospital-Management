@@ -12,6 +12,8 @@ public class Patient {
     private String name;
     private int age;
     private String phone;
+    private String email;
+    private String gender; // MALE, FEMALE, OTHER
 
     // Constructors
     public Patient() {}
@@ -54,5 +56,21 @@ public class Patient {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }

@@ -28,6 +28,7 @@ public class SecurityConfig {
                             response.getWriter().write("{\"message\":\"Invalid username or password\"}");
                         })
                 )
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()

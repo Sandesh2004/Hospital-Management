@@ -6,6 +6,15 @@ public class Availability {
     private String startTime; // "09:00"
     private String endTime;   // "13:00"
 
+    // Constructor
+    public Availability() {}
+
+    public Availability(String day, String startTime, String endTime) {
+        this.day = day;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     // getters & setters
 
     public String getDay() {

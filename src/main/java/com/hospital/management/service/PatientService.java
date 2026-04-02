@@ -35,4 +35,39 @@ public class PatientService {
         return patientRepository.findByPhone(phone)
                 .orElseThrow(() -> new ResourceNotFoundException("Patient not found with phone: " + phone));
     }
+
+    public List<Patient> searchPatients(String name) {
+        return patientRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    // ✏️ Update patient
+    public Patient updatePatient(String id, Patient patientDetails) {
+        Patient patient = getPatientById(id);
+
+        if (patientDetails.getName() != null) {
+            patient.setName(patientDetails.getName());
+        }
+        if (patientDetails.getAge() > 0) {
+            patient.setAge(patientDetails.getAge());
+        }
+        if (patientDetails.getPhone() != null) {
+            patient.setPhone(patientDetails.getPhone());
+        }
+        if (patientDetails.getEmail() != null) {
+            patient.setEmail(patientDetails.getEmail());
+        }
+        if (patientDetails.getGender() != null) {
+            patient.setGender(patientDetails.getGender());
+        }
+
+        return patientRepository.save(patient);
+    }
+
+    // 🗑️ Delete patient
+    public void deletePatient(String id) {
+        if (!patientRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Patient not found with id: " + id);
+        }
+        patientRepository.deleteById(id);
+    }
 }

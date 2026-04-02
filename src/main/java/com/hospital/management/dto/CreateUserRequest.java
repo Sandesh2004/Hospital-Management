@@ -12,9 +12,11 @@ public class CreateUserRequest {
 
     // Doctor-specific fields
     private String name;
+    private String email;
     private String specialization;
     private int experience;
     private String phone;
+    private int patientsPerHour;
 
     private List<Availability> availability;
 
@@ -74,5 +76,29 @@ public class CreateUserRequest {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getPatientsPerHour() {
+        return patientsPerHour;
+    }
+
+    public void setPatientsPerHour(int patientsPerHour) {
+        this.patientsPerHour = patientsPerHour;
+    }
+
+    public List<Availability> getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(List<Availability> availability) {
+        this.availability = availability;
     }
 }
