@@ -5,7 +5,10 @@ import com.hospital.management.model.Doctor;
 import com.hospital.management.service.AppointmentService;
 import com.hospital.management.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication; // ✅ FIXED
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,11 +25,13 @@ public class DoctorController {
 
     // 🌐 PUBLIC API
     @GetMapping
-    public List<Doctor> getDoctors(
+    public Page<Doctor> getDoctors(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) String specialization
+            @RequestParam(required = false) String specialization,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
-        return doctorService.search(name, specialization);
+        return doctorService.search(name, specialization, PageRequest.of(page, size));
     }
 
     // 🔥 FIXED LOGIN MAPPING
@@ -45,20 +50,22 @@ public class DoctorController {
 
     // 📅 Appointments
     @GetMapping("/appointments")
-    public List<Appointment> getAppointments(
+    public Page<Appointment> getAppointments(
             Authentication authentication,
             @RequestParam String date,
-            @RequestParam(required = false) String name
+            @RequestParam(required = false) String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
         String username = authentication.getName();
-
         Doctor doctor = doctorService.getDoctorByUsername(username);
+        var pageable = PageRequest.of(page, size, Sort.by("queueNumber").ascending());
 
         if (name != null && !name.isEmpty()) {
-            return appointmentService.searchAppointments(doctor.getId(), date, name);
+            return appointmentService.searchAppointments(doctor.getId(), date, name, pageable);
         }
 
-        return appointmentService.getDoctorAppointments(doctor.getId(), date);
+        return appointmentService.getAppointmentsByDoctorId(doctor.getId(), date, pageable);
     }
 
     // ✅ Update status

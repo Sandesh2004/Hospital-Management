@@ -8,6 +8,8 @@ import com.hospital.management.model.User;
 import com.hospital.management.repository.DoctorRepository;
 import com.hospital.management.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,6 +67,10 @@ public class AdminService {
     // Get all users
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     // Get user by ID

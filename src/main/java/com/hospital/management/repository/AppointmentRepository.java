@@ -1,6 +1,8 @@
 package com.hospital.management.repository;
 
 import com.hospital.management.model.Appointment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDate;
@@ -16,13 +18,18 @@ public interface AppointmentRepository extends MongoRepository<Appointment, Stri
 
     List<Appointment> findByDoctorIdAndDate(String doctorId, LocalDate date);
 
-    List<Appointment> findByDoctorIdAndDateAndPatientNameContainingIgnoreCase(
+    Page<Appointment> findByDoctorIdAndDate(String doctorId, LocalDate date, Pageable pageable);
+
+    Page<Appointment> findByDoctorIdAndDateAndPatientNameContainingIgnoreCase(
             String doctorId,
             LocalDate date,
-            String name
+            String name,
+            Pageable pageable
     );
+
+    Page<Appointment> findAll(Pageable pageable);
 
     List<Appointment> findByPatientId(String patientId);
 
-    List<Appointment> findByStatus(String status);
+    Page<Appointment> findByStatus(String status, Pageable pageable);
 }

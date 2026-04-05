@@ -4,6 +4,8 @@ import com.hospital.management.dto.CreateUserRequest;
 import com.hospital.management.model.User;
 import com.hospital.management.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +27,11 @@ public class AdminController {
 
     // Get all users
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return adminService.getAllUsers();
+    public Page<User> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return adminService.getAllUsers(PageRequest.of(page, size));
     }
 
     // Get user by ID

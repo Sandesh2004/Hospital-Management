@@ -6,6 +6,8 @@ import com.hospital.management.model.Doctor;
 import com.hospital.management.repository.AppointmentRepository;
 import com.hospital.management.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -154,5 +156,26 @@ public class AppointmentService {
         }
         
         return appointments;
+    }
+
+    public Page<Appointment> getAllAppointments(Pageable pageable) {
+        return appointmentRepository.findAll(pageable)
+                .map(appointment -> {
+                    if (appointment.getDoctorId() != null) {
+                        doctorRepository.findById(appointment.getDoctorId())
+                                .ifPresent(doc -> appointment.setDoctorName(doc.getName()));
+                    }
+                    return appointment;
+                });
+    }
+
+    public Page<Appointment> getAppointmentsByDoctorId(String doctorId, String dateStr, Pageable pageable) {
+        LocalDate date = LocalDate.parse(dateStr);
+        return appointmentRepository.findByDoctorIdAndDate(doctorId, date, pageable);
+    }
+
+    public Page<Appointment> searchAppointments(String doctorId, String dateStr, String name, Pageable pageable) {
+        LocalDate date = LocalDate.parse(dateStr);
+        return appointmentRepository.findByDoctorIdAndDateAndPatientNameContainingIgnoreCase(doctorId, date, name, pageable);
     }
 }

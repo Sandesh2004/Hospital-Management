@@ -6,6 +6,8 @@ import com.hospital.management.model.User;
 import com.hospital.management.repository.DoctorRepository;
 import com.hospital.management.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,22 +25,32 @@ public class DoctorService {
         return doctorRepository.findAll();
     }
 
-    public List<Doctor> search(String name, String specialization) {
+    public Page<Doctor> getAllDoctors(Pageable pageable) {
+        return doctorRepository.findAll(pageable);
+    }
+
+    public Page<Doctor> search(String name, String specialization, Pageable pageable) {
+        if (name != null && name.isBlank()) {
+            name = null;
+        }
+        if (specialization != null && specialization.isBlank()) {
+            specialization = null;
+        }
 
         if (name != null && specialization != null) {
             return doctorRepository
-                    .findByNameContainingIgnoreCaseAndSpecializationIgnoreCase(name, specialization);
+                    .findByNameContainingIgnoreCaseAndSpecializationIgnoreCase(name, specialization, pageable);
         }
 
         if (name != null) {
-            return doctorRepository.findByNameContainingIgnoreCase(name);
+            return doctorRepository.findByNameContainingIgnoreCase(name, pageable);
         }
 
         if (specialization != null) {
-            return doctorRepository.findBySpecializationIgnoreCase(specialization);
+            return doctorRepository.findBySpecializationIgnoreCase(specialization, pageable);
         }
 
-        return doctorRepository.findAll();
+        return doctorRepository.findAll(pageable);
     }
 
     public Doctor saveDoctor(Doctor doctor) {
